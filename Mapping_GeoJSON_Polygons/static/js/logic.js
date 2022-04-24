@@ -30,7 +30,7 @@ let map = L.map('mapid', {
   center: [43.7, -79.3],
   zoom: 11,
   layers: [satelliteStreets]
-})
+});
 
 
 // Pass our map layers into our layers control and add the layers control to the map.
@@ -38,11 +38,10 @@ L.control.layers(baseMaps).addTo(map);
 
 
 // Accessing the Toronto airline routes GeoJSON URL.
-let torontoHoods = "https://raw.githubusercontent.com/nicole-peltier/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/torontoNeighborhoods.json";
-
+let torontoHoods = "https://raw.githubusercontent.com/nicole-peltier/Mapping_Earthquakes/Mapping_GeoJSON_Polygons/torontoNeighborhoods.json"
 // Create a style for the lines.
 let myStyle = {
-  color: "#ffffa1",
+  color: "blue",
   weight: 2
 }
 
@@ -51,5 +50,10 @@ let myStyle = {
 d3.json(torontoHoods).then(function(data) {
   console.log(data);
   // Creating a GeoJSON layer with the retrieved data.
-  L.geoJSON(data).addTo(map);
+  L.geoJSON(data, {
+      style: myStyle,
+      onEachFeature: function(feature, layer) {
+          layer.bindPopup("<h3> Area Name:" + feature.properties.AREA_NAME + "</h3> <hr> <h3> Area ID: " +feature.properties.AREA_S_CD +"</h3>");
+      }
+  }).addTo(map);
 });
